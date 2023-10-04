@@ -21,6 +21,9 @@
         <module>
             AuthorizationServer
         </module>
+        <module>
+            ResourceServer
+        </module>
     </modules>
 
     <packaging>pom</packaging>
