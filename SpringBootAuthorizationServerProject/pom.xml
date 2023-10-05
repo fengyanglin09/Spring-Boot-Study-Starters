@@ -24,6 +24,9 @@
         <module>
             ResourceServer
         </module>
+        <module>
+            OauthClient
+        </module>
     </modules>
 
     <packaging>pom</packaging>

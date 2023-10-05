@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ResourceServer" />
+        <module name="OauthClient" />
         <module name="AuthorizationServer" />
       </profile>
     </annotationProcessing>
@@ -15,6 +16,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="AuthorizationServer" options="-parameters" />
+      <module name="OauthClient" options="-parameters" />
       <module name="ResourceServer" options="-parameters" />
       <module name="SpringBootAuthorizationServerProject" options="" />
     </option>
