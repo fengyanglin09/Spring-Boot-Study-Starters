@@ -16,7 +16,7 @@ import java.util.Enumeration;
  *
  * note the filter is a component, which means it will be invoked for every coming ServletRequest
  * */
-@Component
+//@Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class LogFilter implements Filter {
 
