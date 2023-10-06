@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -65,25 +66,30 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        var user1 = User.withUsername("user")
-                .password("password")
-                .authorities("read")
-                .build();
-        return new InMemoryUserDetailsManager(user1);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        var user1 = User.withUsername("user")
+//                .password(passwordEncoder().encode("password"))
+//                .authorities("read")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("client")
-                .clientSecret("secret")
+                .clientSecret(passwordEncoder().encode("secret"))
                 .scope("read")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
