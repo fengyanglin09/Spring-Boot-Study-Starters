@@ -1,6 +1,8 @@
 package com.example.oauthclient.config;
 
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
@@ -25,8 +27,6 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
@@ -71,12 +71,9 @@ public class SecurityConfig {
                 JWT jwt = JWTParser.parse(accessToken.getTokenValue());
                 JWTClaimsSet claimSet = jwt.getJWTClaimsSet();
                 Collection<String> userAuthorities = claimSet.getStringListClaim("authorities");
-                if(userAuthorities != null){
-                    mappedAuthorities.addAll(userAuthorities.stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .toList());
-                }
-
+                mappedAuthorities.addAll(userAuthorities.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .toList());
             } catch (ParseException e) {
                 System.err.println("Error OAuth2UserService: " + e.getMessage());
             }
