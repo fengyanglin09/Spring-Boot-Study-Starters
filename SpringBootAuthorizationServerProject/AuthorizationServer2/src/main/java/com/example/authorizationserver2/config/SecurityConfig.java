@@ -1,20 +1,22 @@
-package com.example.authorizationserver.config;
+package com.example.authorizationserver2.config;
 
 
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
+import static org.springframework.security.config.Customizer.withDefaults;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -28,21 +30,16 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 
-
+@SuppressWarnings("deprecation")
 @Configuration
 public class SecurityConfig {
 
@@ -60,50 +57,46 @@ public class SecurityConfig {
         http.oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
 
         return http.build();
+
     }
 
     @Bean
     @Order(2)
     public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(request->request.anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults())
-        ;
-        return http.build();
+        return http
+                .formLogin(withDefaults())
+                .authorizeHttpRequests(authorize ->authorize.anyRequest().authenticated())
+                .build();
+
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        var user1 = User.withUsername("user")
-//                .password(passwordEncoder().encode("password"))
-//                .authorities("read")
-//                .build();
-//        return new InMemoryUserDetailsManager(user1);
-//    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        var user1 = User.withUsername("user2")
+                .password("password")
+                .authorities("read")
+                .build();
+        return new InMemoryUserDetailsManager(user1);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("client")
-                .clientSecret(passwordEncoder().encode("secret"))
+                .clientSecret("secret")
                 .scope("read")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2server1")
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2server2")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .clientSettings(clientSettings())
+                .clientSettings(ClientSettings.builder().requireProofKey(true).build())
                 .build();
 
         return new InMemoryRegisteredClientRepository(registeredClient);
@@ -112,35 +105,6 @@ public class SecurityConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
-    }
-
-
-    // this is where the PKCE - proof key for code exchange
-    @Bean
-    ClientSettings clientSettings() {
-        return ClientSettings.builder()
-                .requireProofKey(true)
-                .build();
-    }
-
-
-    //this is where the jwt token (id token and access token) is customized
-    @Bean
-    OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-        return context -> {
-            Authentication principal = context.getPrincipal();
-            if (context.getTokenType().getValue().equals("id_token")) {
-                context.getClaims().claim("Test", "Test Id Token");
-            }
-            if (context.getTokenType().getValue().equals("access_token")) {
-                context.getClaims().claim("Test", "Test Access Token");
-                Set<String> authorities = principal.getAuthorities().stream()
-                        .map( GrantedAuthority::getAuthority).collect(Collectors.toSet());
-                context.getClaims().claim("authorities", authorities)
-                        .claim("user", principal.getName());
-            }
-
-        };
     }
 
     @Bean

@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/pom.xml" />
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/ResourceServer/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/AuthorizationServer2/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/ResourceServer2/pom.xml" />
       </list>
     </option>
   </component>

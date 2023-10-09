@@ -1,30 +1,25 @@
-package com.example.resourceserver.config;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
-import org.springframework.security.web.SecurityFilterChain;
+package com.example.resourceserver2.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
+import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
+import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 public class SecurityConfig {
 
-//    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-//    String issuerUri;
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 
         Map<String, AuthenticationManager> authenticationManagers = new HashMap<>();
         JwtIssuerAuthenticationManagerResolver authenticationManagerResolver = new JwtIssuerAuthenticationManagerResolver(authenticationManagers::get);
@@ -35,24 +30,11 @@ public class SecurityConfig {
         issuers.stream().forEach(issuer -> addManager(authenticationManagers, issuer));
 
         return http
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .oauth2ResourceServer(
-//                        oauth2 -> oauth2.jwt(jwt -> jwt.decoder(JwtDecoders.fromIssuerLocation(issuerUri)))
-                        oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver)
-                )
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationManagerResolver(authenticationManagerResolver))
                 .build();
-    }
-
-    //this is where to extract authorities from access token and convert them to the authorities
-    @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
-        grantedAuthoritiesConverter.setAuthorityPrefix("");//adding prefix to the authority
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-        return jwtAuthenticationConverter;
     }
 
     private void addManager(Map<String, AuthenticationManager> authenticationManagers, String issuer) {

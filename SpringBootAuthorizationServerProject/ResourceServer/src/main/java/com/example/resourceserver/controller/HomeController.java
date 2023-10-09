@@ -14,7 +14,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Authentication authentication) {
         LocalDateTime time = LocalDateTime.now();
-        return "Welcome Home! - " + time + "<br>" + authentication.getName() + " - " + authentication.getAuthorities();
+        return "Welcome Home1 ! - " + time + "<br>" + authentication.getName() + " - " + authentication.getAuthorities();
     }
 
 }

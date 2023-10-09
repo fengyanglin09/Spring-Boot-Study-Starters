@@ -3,6 +3,7 @@ package com.example.oauthclient.controller;
 
 
 import com.example.oauthclient.config.WelcomeClient;
+import com.example.oauthclient.config.WelcomeClient2;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 public class WelcomeController {
 
     private final WelcomeClient welcomeClient;
+    private final WelcomeClient2 welcomeClient2;
 
     @GetMapping("/")
-    public String welcome(Authentication authentication) {
-
-        String authorities = authentication.getName() + " - " + authentication.getAuthorities().toString();
+    public String index(Authentication authentication) {
         String welcome = welcomeClient.getWelcome();
-        return "<h1>" +  welcome + "</h1><h2>" + authorities + "</h2>";
+        String welcome2 = welcomeClient2.getWelcome();
+        return "<h1> Welcome: " + authentication.getName() + "</h1><h2>" + welcome + "</h2><h2>" + welcome2 + "</h2>";
     }
 
 }
