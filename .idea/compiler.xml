@@ -10,10 +10,12 @@
         <module name="AuthorizationServer" />
         <module name="ResourceServer" />
         <module name="OauthClient" />
-        <module name="ResourceServer2" />
-        <module name="AuthorizationServer2" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AuthorizationServer2" target="17" />
+      <module name="ResourceServer2" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

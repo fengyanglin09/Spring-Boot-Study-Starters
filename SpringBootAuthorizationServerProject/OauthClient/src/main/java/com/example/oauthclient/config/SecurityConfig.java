@@ -43,12 +43,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
-                .oauth2Login(withDefaults())
 
                 .oauth2Login(oauth2Login ->
                         {
-//                            oauth2Login.loginPage("/oauth2/authorization/myoauth2server1");
-
+                            oauth2Login.loginPage("/oauth2/authorization/myoauth2");
 
                             oauth2Login.authorizationEndpoint(authorizationEndpointConfig -> authorizationEndpointConfig.authorizationRequestResolver(resolver));
                             oauth2Login.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService()));

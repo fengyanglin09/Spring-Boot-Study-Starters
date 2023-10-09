@@ -99,7 +99,7 @@ public class SecurityConfig {
                 .scope("read")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2server1")
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

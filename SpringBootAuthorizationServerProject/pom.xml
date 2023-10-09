@@ -27,12 +27,7 @@
         <module>
             OauthClient
         </module>
-        <module>
-            AuthorizationServer2
-        </module>
-        <module>
-            ResourceServer2
-        </module>
+
     </modules>
 
     <packaging>pom</packaging>

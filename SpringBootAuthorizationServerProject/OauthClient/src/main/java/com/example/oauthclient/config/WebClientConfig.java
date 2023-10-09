@@ -22,10 +22,6 @@ public class WebClientConfig {
         return httpServiceProxyFactory(authorizedClientManager).createClient(WelcomeClient.class);
     }
 
-    @Bean
-    public WelcomeClient2 welcomeClient2(OAuth2AuthorizedClientManager authorizedClientManager) throws Exception {
-        return httpServiceProxyFactory(authorizedClientManager).createClient(WelcomeClient2.class);
-    }
 
     private HttpServiceProxyFactory httpServiceProxyFactory(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
