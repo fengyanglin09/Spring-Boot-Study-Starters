@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: MyRetroApp
+  banner:
+    location: banner/banner.txt
+
+service:
+  users:
+    server: 127.0.01
+    port: 8081
+    username: admin
+    password: 1234
+
+
+---
+spring:
+  profiles:
+    active: dev
+
+service:
+  users:
+    server: 128.0.01
+    port: 8082
+    username: dev-admin
+    password: 12345

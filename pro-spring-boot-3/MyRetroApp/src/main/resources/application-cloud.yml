@@ -1,0 +1,9 @@
+
+
+
+service:
+  users:
+    server: cloud.server.com
+    port: 1089
+    username: root
+    password: 12345
