@@ -35,7 +35,7 @@ export class LoginComponent {
 
       this.authService.login(email, password).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard'])
+          this.router.navigate(['dashboard'])
         },
         error: (err) => {
           this.errorMessage = 'Invalid login credentials.'

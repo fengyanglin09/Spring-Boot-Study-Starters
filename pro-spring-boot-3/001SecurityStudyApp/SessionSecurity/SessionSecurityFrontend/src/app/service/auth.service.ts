@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {take} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,14 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/user/profile`, { withCredentials: true });
   }
 
+  getSessionInformation() {
+    return this.http.get(`${this.apiUrl}/api/session/session-info`, {withCredentials: true, responseType: "text"});
+  }
+
+
+  invalidateSession(){
+    return this.http.get(`${this.apiUrl}/api/session/invalidate-session`, {withCredentials: true, responseType: "text"})
+  }
 
   /**
    * The backend should invalidate the session, and the session cookie will no longer be sent with requests.
