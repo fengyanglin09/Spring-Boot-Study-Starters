@@ -9,6 +9,9 @@
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/AuthorizationServer2/pom.xml" />
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/ResourceServer2/pom.xml" />
         <option value="$PROJECT_DIR$/pro-spring-boot-3/MyRetroApp/pom.xml" />
+        <option value="$PROJECT_DIR$/pro-spring-boot-3/Users/pom.xml" />
+        <option value="$PROJECT_DIR$/pro-spring-boot-3/0001SpringBasics/Users/pom.xml" />
+        <option value="$PROJECT_DIR$/pro-spring-boot-3/001SecurityStudyApp/SessionSecurity/SessionSecurityBackend/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -16,6 +19,7 @@
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/AuthorizationServer2/pom.xml" />
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/ResourceServer2/pom.xml" />
         <option value="$PROJECT_DIR$/SpringBootAuthorizationServerProject/pom.xml" />
+        <option value="$PROJECT_DIR$/pro-spring-boot-3/users/pom.xml" />
       </set>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />

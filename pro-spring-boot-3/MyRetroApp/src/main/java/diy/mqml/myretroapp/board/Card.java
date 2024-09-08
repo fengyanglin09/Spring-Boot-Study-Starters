@@ -3,21 +3,25 @@ package diy.mqml.myretroapp.board;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Card {
-
+    @NotNull
     private UUID id;
 
-    @NotBlank(message = "A comment must be provided always")
-    @NotNull
+    @NotBlank
     private String comment;
 
-    @NotNull(message = "A CarType HAPPY|MEH|SAD must be provided")
+    @NotNull
     private CardType cardType;
+
 }

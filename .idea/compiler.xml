@@ -7,7 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="SessionSecurityBackend" />
         <module name="MyRetroApp" />
+        <module name="Users" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -17,6 +19,7 @@
       <module name="ResourceServer" target="17" />
       <module name="ResourceServer2" target="17" />
       <module name="SpringBootAuthorizationServerProject" target="1.5" />
+      <module name="users (2)" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -27,7 +30,10 @@
       <module name="OauthClient" options="-parameters" />
       <module name="ResourceServer" options="-parameters" />
       <module name="ResourceServer2" options="-parameters" />
+      <module name="SessionSecurityBackend" options="-parameters" />
       <module name="SpringBootAuthorizationServerProject" options="" />
+      <module name="Users" options="-parameters" />
+      <module name="users (2)" options="-parameters" />
     </option>
   </component>
 </project>

@@ -1,0 +1,30 @@
+server:
+  port: 9090
+#  servlet:
+#    session:
+#      cookie:
+#        http-only: true   # Cookie not accessible via JavaScript
+#        secure: true     # Only send cookie over HTTPS
+#        same-site: lax   # SameSite attribute for CSRF protection
+#      timeout: 30m
+
+
+spring:
+  application:
+    name: 'SessionSecurityBackend'
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    generate-unique-name: false
+    name: 'test-db'
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+

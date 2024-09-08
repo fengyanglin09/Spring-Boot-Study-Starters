@@ -1,67 +1,58 @@
 package diy.mqml.myretroapp.service;
 
 
+
 import diy.mqml.myretroapp.board.Card;
 import diy.mqml.myretroapp.board.RetroBoard;
-import diy.mqml.myretroapp.exception.CardNotFoundException;
-import diy.mqml.myretroapp.persistence.Repository;
+import diy.mqml.myretroapp.persistence.RetroBoardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class RetroBoardService {
 
-    Repository<RetroBoard,UUID> repository;
+    RetroBoardRepository retroBoardRepository;
 
-    public RetroBoard save(RetroBoard domain) {
-        if (domain.getCards() == null)
-            domain.setCards(new ArrayList<>());
-        return this.repository.save(domain);
+    public Mono<RetroBoard> save(RetroBoard domain) {
+        return this.retroBoardRepository.save(domain);
     }
 
-    public RetroBoard findById(UUID uuid) {
-        return this.repository.findById(uuid).get();
+    public Mono<RetroBoard> findById(UUID uuid) {
+        return this.retroBoardRepository.findById(uuid);
     }
 
-    public Iterable<RetroBoard> findAll() {
-        return this.repository.findAll();
+    public Flux<RetroBoard> findAll() {
+        return this.retroBoardRepository.findAll();
     }
 
-    public void delete(UUID uuid) {
-        this.repository.delete(uuid);
+    public Mono<Void> delete(UUID uuid) {
+        return this.retroBoardRepository.deleteById(uuid);
     }
 
-    public Iterable<Card> findAllCardsFromRetroBoard(UUID uuid) {
-        return this.findById(uuid).getCards();
+    public Flux<Card> findAllCardsFromRetroBoard(UUID uuid) {
+        return this.findById(uuid).flatMapIterable(RetroBoard::getCards);
     }
 
-    public Card addCardToRetroBoard(UUID uuid, Card card){
-        if (card.getId() == null)
-            card.setId(UUID.randomUUID());
-
-        RetroBoard retroBoard = this.findById(uuid);
-        List<Card> cardList = new ArrayList<>(retroBoard.getCards());
-        cardList.add(card);
-
-        retroBoard.setCards(cardList);
-        return card;
+    public Mono<Card> addCardToRetroBoard(UUID uuid, Card card) {
+        return this.findById(uuid).flatMap(retroBoard -> {
+            if (card.getId() == null)
+                card.setId(UUID.randomUUID());
+            retroBoard.getCards().add(card);
+            return this.save(retroBoard).thenReturn(card);
+        });
     }
 
-    public Card findCardByUUIDFromRetroBoard(UUID uuid, UUID uuidCard){
-        RetroBoard retroBoard = this.findById(uuid);
-        Optional<Card> card = retroBoard.getCards().stream().filter(c -> c.getId().equals(uuidCard)).findFirst();
-        if (card.isPresent())
-            return card.get();
-        throw new CardNotFoundException();
+    public Mono<Card> findCardByUUID(UUID uuidCard) {
+        Mono<RetroBoard> result = retroBoardRepository.findRetroBoardByIdAndCardId(uuidCard);
+        return result.flatMapIterable(RetroBoard::getCards).filter(card -> card.getId().equals(uuidCard)).next();
     }
 
-    public void removeCardFromRetroBoard(UUID uuid, UUID cardUUID){
-        RetroBoard retroBoard = this.findById(uuid);
-        List<Card> cardList = new ArrayList<>(retroBoard.getCards());
-        cardList.removeIf(card -> card.getId().equals(cardUUID));
-        retroBoard.setCards(cardList);
+    public Mono<Void> removeCardByUUID(UUID uuid, UUID cardUUID) {
+        return retroBoardRepository.removeCardFromRetroBoard(uuid, cardUUID);
     }
 }

@@ -1,22 +1,5 @@
 package diy.mqml.myretroapp.client;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class User {
-    private String email;
-
-    private String name;
-
-    private String gravatarUrl;
-
-    private List<UserRole> userRole;
-
-    private boolean active;
-}
+public record User(String email, String name, String password, String gravatarUrl, List<UserRole> userRole, boolean active) {}
