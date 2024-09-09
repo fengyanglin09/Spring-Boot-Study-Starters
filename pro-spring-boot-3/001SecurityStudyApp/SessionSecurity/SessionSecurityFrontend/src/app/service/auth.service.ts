@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {take} from "rxjs";
+import {map, Observable, take} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
     });
-    return this.http.post(`${this.apiUrl}/api/auth/login`, body.toString(), { headers, withCredentials: true, responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/api/auth/login`, body.toString(), { headers, responseType: 'text' });
 
   }
 
@@ -30,12 +30,25 @@ export class AuthService {
   }
 
   getSessionInformation() {
-    return this.http.get(`${this.apiUrl}/api/session/session-info`, {withCredentials: true, responseType: "text"});
+    return this.http.get(`${this.apiUrl}/api/session/session-info`, { responseType: "text"});
   }
 
-
+  /**
+   * The backend should invalidate the session, and the session cookie will no longer be sent with requests.
+   * */
   invalidateSession(){
-    return this.http.get(`${this.apiUrl}/api/session/invalidate-session`, {withCredentials: true, responseType: "text"})
+    return this.http.get(`${this.apiUrl}/api/session/invalidate-session`, { responseType: "text"})
+  }
+
+  /**
+   * check session status to see if the user is still authenticated
+   * */
+  isAuthenticated(): Observable<boolean> {
+    return this.http.get<any>(`${this.apiUrl}/api/auth/isAuthenticated`).pipe(
+      map(response => {
+        return response.status === 'authenticated'; // Return true if authenticated
+      })
+    );
   }
 
   /**
@@ -44,5 +57,6 @@ export class AuthService {
   logout() {
     return this.http.post('http://api.example.com/logout', {}, { withCredentials: true });
   }
+
 
 }
