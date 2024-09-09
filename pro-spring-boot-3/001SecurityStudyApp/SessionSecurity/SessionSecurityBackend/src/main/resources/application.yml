@@ -21,6 +21,8 @@ spring:
     generate-unique-name: false
     name: 'test-db'
 
+  session:
+    store-type: jdbc
 
 logging:
   level:

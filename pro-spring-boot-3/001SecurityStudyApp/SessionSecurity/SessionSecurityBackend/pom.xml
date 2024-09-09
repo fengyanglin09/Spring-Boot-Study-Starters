@@ -47,6 +47,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Session JDBC -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-jdbc</artifactId>
+<!--            <version>5.8.2</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-core -->
         <dependency>
             <groupId>org.springframework.session</groupId>
