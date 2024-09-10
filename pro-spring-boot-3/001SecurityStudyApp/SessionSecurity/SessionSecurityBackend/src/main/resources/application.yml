@@ -1,12 +1,12 @@
 server:
   port: 9090
-#  servlet:
-#    session:
+  servlet:
+    session:
 #      cookie:
 #        http-only: true   # Cookie not accessible via JavaScript
 #        secure: true     # Only send cookie over HTTPS
 #        same-site: lax   # SameSite attribute for CSRF protection
-#      timeout: 30m
+      timeout: 30m
 
 
 spring:
@@ -17,12 +17,24 @@ spring:
     console:
       enabled: true
 
-  datasource:
-    generate-unique-name: false
-    name: 'test-db'
 
-  session:
-    store-type: jdbc
+  datasource:
+    url: 'jdbc:h2:mem:testdb'
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+#  session:
+#    jdbc:
+#      initialize-schema: always
+#      cleanup-cron: 0 * * * * *
+
+  sql:
+    init:
+      platform: h2
 
 logging:
   level:

@@ -211,7 +211,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-
+                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(Customizer.withDefaults()).disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests( auth -> auth.requestMatchers("/h2-console/**").permitAll())
                 .authorizeHttpRequests( auth -> auth.requestMatchers("/login", "/api/auth/**").permitAll())
